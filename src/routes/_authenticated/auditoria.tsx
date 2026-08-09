@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, ShieldCheck } from "lucide-react";
+import { Download, FileText, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { usePapel } from "@/lib/auth";
 import { useEstrutura } from "@/lib/estrutura-queries";
+import { exportarCsv, exportarPdf } from "@/lib/auditoria-export";
 import {
   useAuditoria,
   useProdutos,
@@ -99,54 +101,34 @@ function Auditoria() {
 
   const { data: registros = [], isLoading, error } = useAuditoria(filtro, isAdmin);
 
-  const exportar = () => {
-    const cab = [
-      "Data/Hora",
-      "Usuário",
-      "Tipo",
-      "Produto",
-      "Descrição",
-      "Lote",
-      "Validade",
-      "Palete",
-      "Quantidade",
-      "Qtd. anterior",
-      "Galpão",
-      "Área",
-      "Rua",
-      "Posição anterior",
-      "Nova posição",
-      "Motivo",
-      "Observação",
-    ];
-    const linhas = registros.map((m) => [
-      dataHora(m.data),
-      m.usuario ?? "—",
-      m.tipo,
-      m.produtos?.codigo ?? "—",
-      m.produtos?.nome ?? "—",
-      m.lote ?? "—",
-      dataBR(m.validade),
-      m.palete_codigo ?? "—",
-      String(m.quantidade),
-      m.quantidade_anterior != null ? String(m.quantidade_anterior) : "—",
-      galpao?.nome ?? "—",
-      m.area,
-      String(m.rua),
-      origem(m),
-      destino(m) ?? "—",
-      m.motivo ?? "—",
-      m.observacao ?? "—",
-    ]);
-    const csv = [cab, ...linhas]
-      .map((l) => l.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";"))
-      .join("\n");
-    const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `auditoria-movimentacoes-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const nomeUsuario = usuarios.find((u) => u.id === usuarioId)?.nome;
+  const nomeProduto = produtos.find((p) => p.id === produtoId);
+  const filtrosAplicados = [
+    de ? `De ${dataBR(de)}` : null,
+    ate ? `Até ${dataBR(ate)}` : null,
+    nomeUsuario ? `Usuário: ${nomeUsuario}` : null,
+    tipo ? `Tipo: ${TIPOS.find(([k]) => k === tipo)?.[1] ?? tipo}` : null,
+    nomeProduto ? `Produto: ${nomeProduto.codigo} — ${nomeProduto.nome}` : null,
+    lote.trim() ? `Lote: ${lote.trim()}` : null,
+    palete.trim() ? `Palete: ${palete.trim()}` : null,
+    area ? `Área: ${area}` : null,
+    rua ? `Rua: ${rua}` : null,
+    posicao ? `Posição: ${posicao}` : null,
+  ].filter(Boolean) as string[];
+
+  const [gerandoPdf, setGerandoPdf] = useState(false);
+
+  const exportar = () => exportarCsv(registros, galpao?.nome);
+
+  const exportarEmPdf = async () => {
+    setGerandoPdf(true);
+    try {
+      await exportarPdf(registros, { galpaoNome: galpao?.nome, filtros: filtrosAplicados });
+    } catch (e) {
+      toast.error(`Não foi possível gerar o PDF: ${(e as Error).message}`);
+    } finally {
+      setGerandoPdf(false);
+    }
   };
 
   if (carregando) {
@@ -178,15 +160,26 @@ function Auditoria() {
             Histórico imutável — nenhum registro pode ser editado ou apagado. {galpao?.nome ?? ""}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={exportar}
-          disabled={registros.length === 0}
-          className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
-        >
-          <Download className="size-3.5" />
-          Exportar CSV
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={exportar}
+            disabled={registros.length === 0}
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
+          >
+            <Download className="size-3.5" />
+            Exportar CSV
+          </button>
+          <button
+            type="button"
+            onClick={exportarEmPdf}
+            disabled={registros.length === 0 || gerandoPdf}
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
+          >
+            <FileText className="size-3.5" />
+            {gerandoPdf ? "Gerando PDF…" : "Exportar PDF"}
+          </button>
+        </div>
       </header>
 
       <section className="grid gap-3 rounded-md border border-border bg-card p-4 md:grid-cols-3 lg:grid-cols-5">

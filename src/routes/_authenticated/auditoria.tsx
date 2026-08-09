@@ -160,15 +160,26 @@ function Auditoria() {
             Histórico imutável — nenhum registro pode ser editado ou apagado. {galpao?.nome ?? ""}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={exportar}
-          disabled={registros.length === 0}
-          className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
-        >
-          <Download className="size-3.5" />
-          Exportar CSV
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={exportar}
+            disabled={registros.length === 0}
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
+          >
+            <Download className="size-3.5" />
+            Exportar CSV
+          </button>
+          <button
+            type="button"
+            onClick={exportarEmPdf}
+            disabled={registros.length === 0 || gerandoPdf}
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs transition hover:bg-accent disabled:opacity-50"
+          >
+            <FileText className="size-3.5" />
+            {gerandoPdf ? "Gerando PDF…" : "Exportar PDF"}
+          </button>
+        </div>
       </header>
 
       <section className="grid gap-3 rounded-md border border-border bg-card p-4 md:grid-cols-3 lg:grid-cols-5">

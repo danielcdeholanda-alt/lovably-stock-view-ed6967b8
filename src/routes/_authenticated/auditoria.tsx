@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, ShieldCheck } from "lucide-react";
+import { Download, FileText, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 import { usePapel } from "@/lib/auth";
 import { useEstrutura } from "@/lib/estrutura-queries";
+import { exportarCsv, exportarPdf } from "@/lib/auditoria-export";
 import {
   useAuditoria,
   useProdutos,

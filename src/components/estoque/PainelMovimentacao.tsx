@@ -72,8 +72,7 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
       <header className="border-b border-border px-4 py-3">
         <h2 className="font-semibold tracking-tight">Operações de armazém</h2>
         <p className="text-xs text-muted-foreground">
-          Entradas, saídas, transferências e inventário — regra de saída deste galpão:{" "}
-          <span className="font-mono text-foreground">{galpao?.politica_saida ?? "—"}</span>
+          Entradas, saídas, transferências e inventário
         </p>
       </header>
 

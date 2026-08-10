@@ -13,7 +13,7 @@ export function AlertaFefo() {
   if (fora.length === 0) return null;
 
   return (
-    <section className="rounded-md border border-warn/40 bg-warn/10">
+    <section className="overflow-hidden rounded-xl border border-warn/40 bg-warn/10 shadow-lg shadow-background/40">
       <header className="flex items-center gap-2 border-b border-warn/30 px-4 py-2.5">
         <AlertTriangle className="size-4 text-warn" />
         <h2 className="text-sm font-semibold text-warn">

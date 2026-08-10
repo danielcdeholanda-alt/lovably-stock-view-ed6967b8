@@ -68,31 +68,23 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
   ];
 
   return (
-    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
-      <header className="border-b border-border px-4 py-3">
-        <h2 className="font-semibold tracking-tight">Operações de armazém</h2>
-        <p className="text-xs text-muted-foreground">
-          Entradas, saídas, transferências e inventário
-        </p>
-      </header>
+    <section className={cn(painelCls, "overflow-hidden")}>
+      <PainelHeader
+        titulo="Operações de armazém"
+        descricao="Entradas, saídas, transferências e inventário"
+        icone={PackagePlus}
+      />
 
-      <div className="flex flex-wrap gap-2 border-b border-border px-4 py-2">
-        {abas.map(([k, l]) => (
-          <button
-            key={k}
-            type="button"
-            onClick={() => setAba(k)}
-            className={cn(
-              "rounded-sm border px-3 py-1 text-xs font-medium transition",
-              aba === k
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {l}
-          </button>
-        ))}
+      <div className="border-b border-border px-5 pb-4">
+        <div className={pillBarCls}>
+          {abas.map(([k, l]) => (
+            <button key={k} type="button" onClick={() => setAba(k)} className={pillCls(aba === k)}>
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
+
 
       <div className="grid gap-4 p-4 lg:grid-cols-2">
         {aba === "entrada" && <FormEntrada itens={itens} />}

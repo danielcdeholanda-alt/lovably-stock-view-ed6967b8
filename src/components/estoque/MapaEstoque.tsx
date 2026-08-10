@@ -135,6 +135,68 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
         </ul>
       </div>
 
+      <div className="px-5 pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-0 flex-1 sm:max-w-md">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              list="mapa-produtos"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Encontrar produto (código, nome, lote ou palete)"
+              className="w-full rounded-full border border-border/70 bg-background/50 py-1.5 pl-9 pr-8 text-xs outline-none transition focus:ring-2 focus:ring-ring"
+            />
+            <datalist id="mapa-produtos">
+              {sugestoes.map((s) => (
+                <option key={s.codigo} value={s.codigo}>
+                  {s.produto}
+                </option>
+              ))}
+            </datalist>
+            {busca && (
+              <button
+                type="button"
+                onClick={() => setBusca("")}
+                aria-label="Limpar busca"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+
+          {termo && (
+            <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+              <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 font-medium text-primary">
+                {encontrados.length} palete(s) encontrado(s)
+              </span>
+              {porArea.map(([a, n]) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => {
+                    setArea(a);
+                    setSel(null);
+                  }}
+                  className={cn(
+                    "rounded-full border border-border/70 px-2.5 py-1 font-mono transition hover:bg-accent hover:text-foreground",
+                    a === area ? "bg-accent text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {a}: {n}
+                </button>
+              ))}
+              {encontrados.length === 0 && (
+                <span className="text-muted-foreground">Nenhum palete disponível para o termo.</span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+
+
       <div className="max-h-[560px] overflow-auto border-y border-border/70 bg-background/30 px-5 py-4">
         <div className="space-y-1">
           {mapa.map((linha, i) => {

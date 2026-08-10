@@ -47,7 +47,7 @@ export function Kpis({ itens }: { itens: ItemEstoque[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map((c) => (
-        <div key={c.label} className="rounded-md border border-border bg-card p-4">
+        <div key={c.label} className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4">
           <div className="flex items-start justify-between gap-2">
             <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{c.label}</p>
             <c.icon className={cn("size-4", c.tone)} />

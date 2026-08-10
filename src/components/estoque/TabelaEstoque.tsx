@@ -60,7 +60,7 @@ export function TabelaEstoque({ itens }: { itens: ItemEstoque[] }) {
 
 
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
         <div>
           <h2 className="font-semibold tracking-tight">Posições de estoque (FIFO)</h2>

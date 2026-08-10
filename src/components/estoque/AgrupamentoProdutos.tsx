@@ -51,7 +51,7 @@ export function AgrupamentoProdutos({ itens }: { itens: ItemEstoque[] }) {
   }, [itens, aberto]);
 
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
       <header className="flex items-center gap-2 border-b border-border px-4 py-3">
         <Layers className="size-4 text-primary" />
         <div>

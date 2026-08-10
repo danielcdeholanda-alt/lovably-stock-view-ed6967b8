@@ -138,7 +138,7 @@ function Auditoria() {
   if (!isAdmin) {
     return (
       <main className="mx-auto max-w-[1400px] px-4 py-10">
-        <div className="rounded-md border border-border bg-card p-6 text-center">
+        <div className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-6 text-center">
           <h1 className="text-lg font-semibold">Acesso restrito</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             A auditoria de movimentações é exclusiva para administradores.
@@ -182,7 +182,7 @@ function Auditoria() {
         </div>
       </header>
 
-      <section className="grid gap-3 rounded-md border border-border bg-card p-4 md:grid-cols-3 lg:grid-cols-5">
+      <section className="grid gap-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4 md:grid-cols-3 lg:grid-cols-5">
         <div>
           <label className={labelCls}>De</label>
           <input type="date" value={de} onChange={(e) => setDe(e.target.value)} className={inputCls} />
@@ -279,7 +279,7 @@ function Auditoria() {
         </p>
       )}
 
-      <section className="overflow-x-auto rounded-md border border-border bg-card">
+      <section className="overflow-x-auto panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
         <table className="w-full min-w-[1100px] text-xs">
           <thead className="bg-muted/40 text-[11px] uppercase tracking-wide text-muted-foreground">
             <tr>

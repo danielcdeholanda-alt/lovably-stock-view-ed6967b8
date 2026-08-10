@@ -111,7 +111,7 @@ function UsuariosPage() {
             },
           );
         }}
-        className="space-y-3 rounded-md border border-border bg-card p-4"
+        className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4"
       >
         <h2 className="text-sm font-semibold">Novo usuário</h2>
         <div>
@@ -152,7 +152,7 @@ function UsuariosPage() {
         </button>
       </form>
 
-      <section className="rounded-md border border-border bg-card">
+      <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
         <header className="border-b border-border px-4 py-3 text-sm font-semibold">
           Usuários do sistema
         </header>

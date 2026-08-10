@@ -68,7 +68,7 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
   ];
 
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
       <header className="border-b border-border px-4 py-3">
         <h2 className="font-semibold tracking-tight">Operações de armazém</h2>
         <p className="text-xs text-muted-foreground">

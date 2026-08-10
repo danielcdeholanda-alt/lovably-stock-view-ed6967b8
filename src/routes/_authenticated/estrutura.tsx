@@ -56,12 +56,12 @@ function EstruturaPage() {
 
   return (
     <main className="mx-auto flex max-w-[1200px] flex-col gap-4 px-4 py-5">
-      <section className="rounded-md border border-border bg-card p-4">
+      <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4">
         <h2 className="font-semibold tracking-tight">Estrutura modular</h2>
         <p className="text-xs text-muted-foreground">
           {galpao?.nome ?? "—"} · {areas.length} área(s) · {ruas.length} rua(s) ·{" "}
-          {capacidadeTotal.toLocaleString("pt-BR")} posições de palete ·{" "}
-          {galpoes.length} galpão(ões) cadastrados
+          {capacidadeTotal.toLocaleString("pt-BR")} posições de palete · {galpoes.length}{" "}
+          galpão(ões) cadastrados
         </p>
       </section>
 
@@ -98,7 +98,7 @@ function NovoGalpao() {
           },
         );
       }}
-      className="space-y-3 rounded-md border border-border bg-card p-4"
+      className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4"
     >
       <h3 className="text-sm font-semibold">Novo galpão</h3>
       <div>
@@ -142,7 +142,7 @@ function NovaArea({ galpaoId }: { galpaoId?: string }) {
           },
         );
       }}
-      className="space-y-3 rounded-md border border-border bg-card p-4"
+      className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4"
     >
       <h3 className="text-sm font-semibold">Nova área (galpão selecionado)</h3>
       <div>
@@ -187,7 +187,7 @@ function NovasRuas({ areas }: { areas: { id: string; nome: string }[] }) {
           },
         );
       }}
-      className="space-y-3 rounded-md border border-border bg-card p-4"
+      className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4"
     >
       <h3 className="text-sm font-semibold">Adicionar ruas em bloco</h3>
       <div>
@@ -252,7 +252,7 @@ function ListaRuas() {
   const lista = ruas.filter((r) => r.area === areaAtual).sort((a, b) => a.rua - b.rua);
 
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
       <header className="flex flex-wrap items-center gap-2 border-b border-border px-4 py-3">
         <h3 className="mr-auto text-sm font-semibold">Ruas cadastradas</h3>
         <select

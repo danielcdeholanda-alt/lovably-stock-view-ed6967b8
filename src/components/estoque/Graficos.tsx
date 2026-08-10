@@ -12,7 +12,6 @@ import {
 import { STATUS_LABEL, statusValidade, type ItemEstoque } from "@/data/estoque";
 import { useEstrutura } from "@/lib/estrutura-queries";
 
-
 const STATUS_COLORS: Record<string, string> = {
   vencido: "var(--dead)",
   critico: "var(--crit)",
@@ -29,7 +28,6 @@ export function Graficos({ itens }: { itens: ItemEstoque[] }) {
   }));
 
   const porArea = estrutura.resumoAreas(itens).map((a) => ({
-
     area: `Área ${a.area}`,
     ocupados: a.ocupados,
     livres: a.capacidade - a.ocupados,
@@ -37,7 +35,7 @@ export function Graficos({ itens }: { itens: ItemEstoque[] }) {
 
   return (
     <div className="grid gap-3 lg:grid-cols-5">
-      <div className="rounded-md border border-border bg-card p-4 lg:col-span-3">
+      <div className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4 lg:col-span-3">
         <h2 className="font-semibold tracking-tight">Ocupação por área</h2>
         <p className="mb-3 text-xs text-muted-foreground">
           Posições de palete ocupadas x livres em cada área
@@ -56,13 +54,18 @@ export function Graficos({ itens }: { itens: ItemEstoque[] }) {
               }}
             />
             <Bar dataKey="ocupados" stackId="a" fill="var(--chart-1)" isAnimationActive={false} />
-            <Bar dataKey="livres" stackId="a" fill="var(--secondary)" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+            <Bar
+              dataKey="livres"
+              stackId="a"
+              fill="var(--secondary)"
+              radius={[3, 3, 0, 0]}
+              isAnimationActive={false}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
-
-      <div className="rounded-md border border-border bg-card p-4 lg:col-span-2">
+      <div className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4 lg:col-span-2">
         <h2 className="font-semibold tracking-tight">Situação de validade</h2>
         <p className="mb-3 text-xs text-muted-foreground">Posições por faixa de vencimento</p>
         <ResponsiveContainer width="100%" height={200}>

@@ -28,7 +28,6 @@ import {
   useSaidaPorRegra,
   useStatusPalete,
   useSugestaoRuas,
-
   useTransferencia,
   type PaleteSelecionado,
 } from "@/lib/estoque-queries";
@@ -40,6 +39,7 @@ import {
   tipoDoCodigo,
 } from "@/lib/codigo-produto";
 import { cn } from "@/lib/utils";
+import { PainelHeader, painelCls, pillBarCls, pillCls } from "@/components/ui/painel";
 
 const inputCls =
   "w-full rounded-sm border border-input bg-background px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring";
@@ -52,7 +52,11 @@ const btnGhost =
 type Aba = "entrada" | "saida" | "transferencia" | "ajuste" | "produto";
 
 const dataBR = (iso?: string | null) =>
-  iso ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : "—";
+  iso
+    ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", {
+        timeZone: "UTC",
+      })
+    : "—";
 
 export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
   const [aba, setAba] = useState<Aba>("entrada");
@@ -68,30 +72,21 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
   ];
 
   return (
-    <section className="rounded-md border border-border bg-card">
-      <header className="border-b border-border px-4 py-3">
-        <h2 className="font-semibold tracking-tight">Operações de armazém</h2>
-        <p className="text-xs text-muted-foreground">
-          Entradas, saídas, transferências e inventário
-        </p>
-      </header>
+    <section className={cn(painelCls, "overflow-hidden")}>
+      <PainelHeader
+        titulo="Operações de armazém"
+        descricao="Entradas, saídas, transferências e inventário"
+        icone={PackagePlus}
+      />
 
-      <div className="flex flex-wrap gap-2 border-b border-border px-4 py-2">
-        {abas.map(([k, l]) => (
-          <button
-            key={k}
-            type="button"
-            onClick={() => setAba(k)}
-            className={cn(
-              "rounded-sm border px-3 py-1 text-xs font-medium transition",
-              aba === k
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {l}
-          </button>
-        ))}
+      <div className="border-b border-border px-5 pb-4">
+        <div className={pillBarCls}>
+          {abas.map(([k, l]) => (
+            <button key={k} type="button" onClick={() => setAba(k)} className={pillCls(aba === k)}>
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="grid gap-4 p-4 lg:grid-cols-2">
@@ -107,13 +102,7 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
 }
 
 /** Campo de código de produto com sugestões. */
-function CampoProduto({
-  codigo,
-  setCodigo,
-}: {
-  codigo: string;
-  setCodigo: (v: string) => void;
-}) {
+function CampoProduto({ codigo, setCodigo }: { codigo: string; setCodigo: (v: string) => void }) {
   const { data: produtos = [] } = useProdutos();
   const produto = useMemo(() => {
     const c = normalizarCodigo(codigo);
@@ -202,7 +191,6 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
       itens.filter((i) => i.area === area && i.rua === rua && i.validade <= validade).length + 1
     );
   }, [itens, area, rua, validade]);
-
 
   const ruas = estrutura.ruasDaArea(area);
   const ocupados = itens.filter((i) => i.area === area && i.rua === rua).length;
@@ -329,7 +317,6 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
           </div>
         </div>
       )}
-
 
       <div className="grid grid-cols-3 gap-3">
         <div>
@@ -518,7 +505,9 @@ function FormSaida({ itens }: { itens: ItemEstoque[] }) {
             onClick={() => setModo(k)}
             className={cn(
               "rounded-sm border px-3 py-1 text-xs transition disabled:opacity-40",
-              modo === k ? "border-primary bg-primary/10 text-foreground" : "border-border text-muted-foreground",
+              modo === k
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border text-muted-foreground",
             )}
           >
             {l}
@@ -613,8 +602,8 @@ function FormSaida({ itens }: { itens: ItemEstoque[] }) {
                         {i.codigo} — {i.produto}
                       </p>
                       <p className="truncate font-mono text-muted-foreground">
-                        {i.paleteCodigo} · {i.endereco ?? `${i.area}-${i.rua}`} · {i.quantidade} cx ·
-                        val {dataBR(i.validade)} · {STATUS_LABEL[statusValidade(i.validade)]}
+                        {i.paleteCodigo} · {i.endereco ?? `${i.area}-${i.rua}`} · {i.quantidade} cx
+                        · val {dataBR(i.validade)} · {STATUS_LABEL[statusValidade(i.validade)]}
                       </p>
                     </div>
                     <button
@@ -889,7 +878,11 @@ function FormAjuste({ itens }: { itens: ItemEstoque[] }) {
               value={i.status}
               onChange={(e) =>
                 status.mutate(
-                  { palete_id: i.id, status: e.target.value as PaleteStatus, motivo: "Alteração de situação" },
+                  {
+                    palete_id: i.id,
+                    status: e.target.value as PaleteStatus,
+                    motivo: "Alteração de situação",
+                  },
                   {
                     onSuccess: () => toast.success("Situação atualizada"),
                     onError: (err: Error) => toast.error(err.message),

@@ -8,6 +8,7 @@ import {
 } from "@/data/estoque";
 import { saborDoCodigo, tipoDoCodigo } from "@/lib/codigo-produto";
 import { cn } from "@/lib/utils";
+import { painelCls, pillBarCls, pillCls } from "@/components/ui/painel";
 import { Search } from "lucide-react";
 
 const TONE: Record<StatusValidade, string> = {
@@ -58,32 +59,29 @@ export function TabelaEstoque({ itens }: { itens: ItemEstoque[] }) {
 
   const visiveis = filtrados.slice(0, 300);
 
-
   return (
-    <section className="rounded-md border border-border bg-card">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <div>
-          <h2 className="font-semibold tracking-tight">Posições de estoque (FIFO)</h2>
-          <p className="text-xs text-muted-foreground">
+    <section className={cn(painelCls, "overflow-hidden")}>
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 pb-4 pt-5">
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold tracking-tight">Posições de estoque (FIFO)</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
             Ordenado pela validade mais antiga — primeiro a sair
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {(["todos", "vencido", "critico", "atencao", "ok"] as const).map((f) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setFiltro(f)}
-              className={cn(
-                "rounded-sm border px-2.5 py-1 text-xs transition",
-                filtro === f
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {f === "todos" ? "Todos" : STATUS_LABEL[f]}
-            </button>
-          ))}
+          <div className={pillBarCls}>
+            {(["todos", "vencido", "critico", "atencao", "ok"] as const).map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setFiltro(f)}
+                className={pillCls(filtro === f)}
+              >
+                {f === "todos" ? "Todos" : STATUS_LABEL[f]}
+              </button>
+            ))}
+          </div>
+
           <select
             value={tipo}
             onChange={(e) => {
@@ -189,7 +187,6 @@ export function TabelaEstoque({ itens }: { itens: ItemEstoque[] }) {
         Exibindo {visiveis.length.toLocaleString("pt-BR")} de{" "}
         {filtrados.length.toLocaleString("pt-BR")} paletes
       </p>
-
     </section>
   );
 }

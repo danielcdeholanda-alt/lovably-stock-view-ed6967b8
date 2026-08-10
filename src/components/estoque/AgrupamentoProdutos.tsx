@@ -13,8 +13,15 @@ type Linha = {
   produtos: number;
 };
 
-function agrupar(itens: ItemEstoque[], chaveDe: (i: ItemEstoque) => string, rotuloDe: (k: string) => string) {
-  const mapa = new Map<string, { paletes: number; caixas: number; criticos: number; skus: Set<string> }>();
+function agrupar(
+  itens: ItemEstoque[],
+  chaveDe: (i: ItemEstoque) => string,
+  rotuloDe: (k: string) => string,
+) {
+  const mapa = new Map<
+    string,
+    { paletes: number; caixas: number; criticos: number; skus: Set<string> }
+  >();
   for (const i of itens) {
     const k = chaveDe(i);
     const atual = mapa.get(k) ?? { paletes: 0, caixas: 0, criticos: 0, skus: new Set<string>() };
@@ -40,24 +47,34 @@ export function AgrupamentoProdutos({ itens }: { itens: ItemEstoque[] }) {
   const [aberto, setAberto] = useState<string | null>(null);
 
   const porTipo = useMemo(
-    () => agrupar(itens, (i) => tipoDoCodigo(i.codigo), (k) => `Tipo ${k}`),
+    () =>
+      agrupar(
+        itens,
+        (i) => tipoDoCodigo(i.codigo),
+        (k) => `Tipo ${k}`,
+      ),
     [itens],
   );
 
   const saboresDoTipo = useMemo(() => {
     if (!aberto) return [];
     const doTipo = itens.filter((i) => tipoDoCodigo(i.codigo) === aberto);
-    return agrupar(doTipo, (i) => saborDoCodigo(i.codigo), (k) => `Sabor ${k}`);
+    return agrupar(
+      doTipo,
+      (i) => saborDoCodigo(i.codigo),
+      (k) => `Sabor ${k}`,
+    );
   }, [itens, aberto]);
 
   return (
-    <section className="rounded-md border border-border bg-card">
+    <section className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40">
       <header className="flex items-center gap-2 border-b border-border px-4 py-3">
         <Layers className="size-4 text-primary" />
         <div>
           <h2 className="font-semibold tracking-tight">Estoque por tipo de produto e sabor</h2>
           <p className="text-xs text-muted-foreground">
-            Código = 4 dígitos de tipo + 000 + 3 dígitos de sabor — clique num tipo para ver os sabores
+            Código = 4 dígitos de tipo + 000 + 3 dígitos de sabor — clique num tipo para ver os
+            sabores
           </p>
         </div>
       </header>
@@ -107,7 +124,10 @@ export function AgrupamentoProdutos({ itens }: { itens: ItemEstoque[] }) {
                   </tr>
                   {aberto === t.chave &&
                     saboresDoTipo.map((s) => (
-                      <tr key={`${t.chave}-${s.chave}`} className="border-t border-border/40 bg-background/40">
+                      <tr
+                        key={`${t.chave}-${s.chave}`}
+                        className="border-t border-border/40 bg-background/40"
+                      >
                         <td className="py-1.5 pl-9 pr-3 font-mono text-[11px] text-muted-foreground">
                           {s.rotulo}
                         </td>

@@ -160,7 +160,22 @@
     "JetBrains Mono", ui-monospace, monospace;
 }
 
-/* ---------- Mapa de estoque ---------- */
+/* ---------- Painéis (padrão visual do mapa de estoque) ---------- */
+@utility panel-surface {
+  background-image:
+    radial-gradient(
+      120% 120% at 0% 0%,
+      color-mix(in oklab, var(--color-primary) 8%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-foreground) 3%, transparent),
+      transparent 40%
+    );
+}
+
+/* Alias histórico usado pelo mapa */
 @utility mapa-surface {
   background-image:
     radial-gradient(
@@ -174,6 +189,7 @@
       transparent 40%
     );
 }
+
 
 /* Trilho da rua: sulco sutil atrás das posições de palete */
 @utility mapa-rua {

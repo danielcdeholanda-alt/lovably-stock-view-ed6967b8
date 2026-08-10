@@ -8,6 +8,7 @@ import {
 } from "@/data/estoque";
 import { saborDoCodigo, tipoDoCodigo } from "@/lib/codigo-produto";
 import { cn } from "@/lib/utils";
+import { painelCls, pillBarCls, pillCls } from "@/components/ui/painel";
 import { Search } from "lucide-react";
 
 const TONE: Record<StatusValidade, string> = {

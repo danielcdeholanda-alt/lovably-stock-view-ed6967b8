@@ -40,6 +40,7 @@ import {
   tipoDoCodigo,
 } from "@/lib/codigo-produto";
 import { cn } from "@/lib/utils";
+import { PainelHeader, painelCls, pillBarCls, pillCls } from "@/components/ui/painel";
 
 const inputCls =
   "w-full rounded-sm border border-input bg-background px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring";

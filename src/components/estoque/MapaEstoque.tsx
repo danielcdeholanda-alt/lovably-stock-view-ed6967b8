@@ -30,6 +30,33 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
   const area = areaSel || AREAS[0] || "";
   const [sel, setSel] = useState<CelulaPalete | null>(null);
   const [paleteAcao, setPaleteAcao] = useState<ItemEstoque | null>(null);
+  const [busca, setBusca] = useState("");
+
+  const termo = busca.trim().toLowerCase();
+  const combina = (i?: ItemEstoque) =>
+    !!termo &&
+    !!i &&
+    (i.codigo.toLowerCase().includes(termo) ||
+      i.produto.toLowerCase().includes(termo) ||
+      i.paleteCodigo.toLowerCase().includes(termo) ||
+      (i.lote ?? "").toLowerCase().includes(termo));
+
+  const sugestoes = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const i of itens) m.set(i.codigo, i.produto);
+    return Array.from(m, ([codigo, produto]) => ({ codigo, produto })).slice(0, 300);
+  }, [itens]);
+
+  const encontrados = useMemo(
+    () => (termo ? itens.filter((i) => combina(i)) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [itens, termo],
+  );
+  const porArea = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const i of encontrados) m.set(i.area, (m.get(i.area) ?? 0) + 1);
+    return Array.from(m).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [encontrados]);
 
   const mapa = useMemo(
     () => (area ? estrutura.buildMapaArea(itens, area) : []),
@@ -40,6 +67,7 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
   const capacidade = estrutura.capacidadeArea(area);
   const ocupados = itens.filter((i) => i.area === area).length;
   const ocupacao = capacidade ? Math.round((ocupados / capacidade) * 100) : 0;
+
 
   return (
     <section className="mapa-surface overflow-hidden rounded-xl border border-border bg-card shadow-lg shadow-background/40">

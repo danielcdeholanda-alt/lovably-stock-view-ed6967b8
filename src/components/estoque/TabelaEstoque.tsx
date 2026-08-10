@@ -59,7 +59,6 @@ export function TabelaEstoque({ itens }: { itens: ItemEstoque[] }) {
 
   const visiveis = filtrados.slice(0, 300);
 
-
   return (
     <section className={cn(painelCls, "overflow-hidden")}>
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 pb-4 pt-5">
@@ -188,7 +187,6 @@ export function TabelaEstoque({ itens }: { itens: ItemEstoque[] }) {
         Exibindo {visiveis.length.toLocaleString("pt-BR")} de{" "}
         {filtrados.length.toLocaleString("pt-BR")} paletes
       </p>
-
     </section>
   );
 }

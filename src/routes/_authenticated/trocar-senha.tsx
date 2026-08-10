@@ -58,7 +58,10 @@ function TrocarSenhaPage() {
 
   return (
     <main className="mx-auto max-w-sm px-4 py-8">
-      <form onSubmit={salvar} className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-5">
+      <form
+        onSubmit={salvar}
+        className="space-y-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-5"
+      >
         <div className="flex items-center gap-2">
           <KeyRound className="size-4 text-primary" />
           <h2 className="text-sm font-semibold">Defina sua nova senha</h2>

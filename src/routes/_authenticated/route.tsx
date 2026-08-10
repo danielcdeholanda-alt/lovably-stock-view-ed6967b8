@@ -21,7 +21,6 @@ export const Route = createFileRoute("/_authenticated")({
   component: Layout,
 });
 
-
 function Layout() {
   return (
     <EstruturaProvider>
@@ -100,7 +99,6 @@ function Cabecalho() {
               >
                 Auditoria
               </Link>
-
             </>
           )}
           <Link

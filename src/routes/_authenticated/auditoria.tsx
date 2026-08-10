@@ -50,7 +50,11 @@ const TIPOS: Array<[TipoMovimentacao, string]> = [
 
 const dataHora = (iso: string) => new Date(iso).toLocaleString("pt-BR");
 const dataBR = (iso?: string | null) =>
-  iso ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : "—";
+  iso
+    ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", {
+        timeZone: "UTC",
+      })
+    : "—";
 
 function origem(m: RegistroAuditoria) {
   return `${m.area}-${String(m.rua).padStart(2, "0")}-${String(m.posicao).padStart(2, "0")}`;
@@ -81,7 +85,10 @@ function Auditoria() {
     const t = produtoTexto.trim().toLowerCase();
     if (!t) return undefined;
     return produtos.find(
-      (p) => p.codigo.toLowerCase() === t || p.codigo.toLowerCase().includes(t) || p.nome.toLowerCase().includes(t),
+      (p) =>
+        p.codigo.toLowerCase() === t ||
+        p.codigo.toLowerCase().includes(t) ||
+        p.nome.toLowerCase().includes(t),
     )?.id;
   }, [produtoTexto, produtos]);
 
@@ -132,7 +139,11 @@ function Auditoria() {
   };
 
   if (carregando) {
-    return <main className="mx-auto max-w-[1400px] px-4 py-6 text-sm text-muted-foreground">Carregando…</main>;
+    return (
+      <main className="mx-auto max-w-[1400px] px-4 py-6 text-sm text-muted-foreground">
+        Carregando…
+      </main>
+    );
   }
 
   if (!isAdmin) {
@@ -185,15 +196,29 @@ function Auditoria() {
       <section className="grid gap-3 panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4 md:grid-cols-3 lg:grid-cols-5">
         <div>
           <label className={labelCls}>De</label>
-          <input type="date" value={de} onChange={(e) => setDe(e.target.value)} className={inputCls} />
+          <input
+            type="date"
+            value={de}
+            onChange={(e) => setDe(e.target.value)}
+            className={inputCls}
+          />
         </div>
         <div>
           <label className={labelCls}>Até</label>
-          <input type="date" value={ate} onChange={(e) => setAte(e.target.value)} className={inputCls} />
+          <input
+            type="date"
+            value={ate}
+            onChange={(e) => setAte(e.target.value)}
+            className={inputCls}
+          />
         </div>
         <div>
           <label className={labelCls}>Usuário</label>
-          <select value={usuarioId} onChange={(e) => setUsuarioId(e.target.value)} className={inputCls}>
+          <select
+            value={usuarioId}
+            onChange={(e) => setUsuarioId(e.target.value)}
+            className={inputCls}
+          >
             <option value="">Todos</option>
             {usuarios.map((u) => (
               <option key={u.id} value={u.id}>
@@ -227,7 +252,12 @@ function Auditoria() {
         </div>
         <div>
           <label className={labelCls}>Lote</label>
-          <input value={lote} onChange={(e) => setLote(e.target.value)} className={inputCls} placeholder="Todos" />
+          <input
+            value={lote}
+            onChange={(e) => setLote(e.target.value)}
+            className={inputCls}
+            placeholder="Todos"
+          />
         </div>
         <div>
           <label className={labelCls}>Palete</label>
@@ -316,7 +346,9 @@ function Auditoria() {
                   {origem(m)}
                   {destino(m) ? ` → ${destino(m)}` : ""}
                 </td>
-                <td className="px-3 py-2 text-muted-foreground">{m.motivo ?? m.observacao ?? "—"}</td>
+                <td className="px-3 py-2 text-muted-foreground">
+                  {m.motivo ?? m.observacao ?? "—"}
+                </td>
               </tr>
             ))}
             {!isLoading && registros.length === 0 && (
@@ -328,7 +360,9 @@ function Auditoria() {
             )}
           </tbody>
         </table>
-        {isLoading && <p className="px-3 py-3 text-xs text-muted-foreground">Carregando registros…</p>}
+        {isLoading && (
+          <p className="px-3 py-3 text-xs text-muted-foreground">Carregando registros…</p>
+        )}
       </section>
       <p className="text-[11px] text-muted-foreground">
         Exibindo até 500 registros mais recentes conforme os filtros aplicados.

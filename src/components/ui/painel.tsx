@@ -38,10 +38,7 @@ export function PainelHeader({
 }) {
   return (
     <header
-      className={cn(
-        "flex flex-wrap items-start justify-between gap-3 px-5 pb-4 pt-5",
-        className,
-      )}
+      className={cn("flex flex-wrap items-start justify-between gap-3 px-5 pb-4 pt-5", className)}
     >
       <div className="min-w-0">
         <h2 className="flex items-center gap-2 text-base font-semibold tracking-tight">

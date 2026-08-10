@@ -28,7 +28,6 @@ import {
   useSaidaPorRegra,
   useStatusPalete,
   useSugestaoRuas,
-
   useTransferencia,
   type PaleteSelecionado,
 } from "@/lib/estoque-queries";
@@ -53,7 +52,11 @@ const btnGhost =
 type Aba = "entrada" | "saida" | "transferencia" | "ajuste" | "produto";
 
 const dataBR = (iso?: string | null) =>
-  iso ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", { timeZone: "UTC" }) : "—";
+  iso
+    ? new Date(iso.length <= 10 ? iso + "T00:00:00Z" : iso).toLocaleDateString("pt-BR", {
+        timeZone: "UTC",
+      })
+    : "—";
 
 export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
   const [aba, setAba] = useState<Aba>("entrada");
@@ -86,7 +89,6 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
         </div>
       </div>
 
-
       <div className="grid gap-4 p-4 lg:grid-cols-2">
         {aba === "entrada" && <FormEntrada itens={itens} />}
         {aba === "saida" && <FormSaida itens={itens} />}
@@ -100,13 +102,7 @@ export function PainelMovimentacao({ itens }: { itens: ItemEstoque[] }) {
 }
 
 /** Campo de código de produto com sugestões. */
-function CampoProduto({
-  codigo,
-  setCodigo,
-}: {
-  codigo: string;
-  setCodigo: (v: string) => void;
-}) {
+function CampoProduto({ codigo, setCodigo }: { codigo: string; setCodigo: (v: string) => void }) {
   const { data: produtos = [] } = useProdutos();
   const produto = useMemo(() => {
     const c = normalizarCodigo(codigo);
@@ -195,7 +191,6 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
       itens.filter((i) => i.area === area && i.rua === rua && i.validade <= validade).length + 1
     );
   }, [itens, area, rua, validade]);
-
 
   const ruas = estrutura.ruasDaArea(area);
   const ocupados = itens.filter((i) => i.area === area && i.rua === rua).length;
@@ -322,7 +317,6 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
           </div>
         </div>
       )}
-
 
       <div className="grid grid-cols-3 gap-3">
         <div>
@@ -511,7 +505,9 @@ function FormSaida({ itens }: { itens: ItemEstoque[] }) {
             onClick={() => setModo(k)}
             className={cn(
               "rounded-sm border px-3 py-1 text-xs transition disabled:opacity-40",
-              modo === k ? "border-primary bg-primary/10 text-foreground" : "border-border text-muted-foreground",
+              modo === k
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border text-muted-foreground",
             )}
           >
             {l}
@@ -606,8 +602,8 @@ function FormSaida({ itens }: { itens: ItemEstoque[] }) {
                         {i.codigo} — {i.produto}
                       </p>
                       <p className="truncate font-mono text-muted-foreground">
-                        {i.paleteCodigo} · {i.endereco ?? `${i.area}-${i.rua}`} · {i.quantidade} cx ·
-                        val {dataBR(i.validade)} · {STATUS_LABEL[statusValidade(i.validade)]}
+                        {i.paleteCodigo} · {i.endereco ?? `${i.area}-${i.rua}`} · {i.quantidade} cx
+                        · val {dataBR(i.validade)} · {STATUS_LABEL[statusValidade(i.validade)]}
                       </p>
                     </div>
                     <button
@@ -882,7 +878,11 @@ function FormAjuste({ itens }: { itens: ItemEstoque[] }) {
               value={i.status}
               onChange={(e) =>
                 status.mutate(
-                  { palete_id: i.id, status: e.target.value as PaleteStatus, motivo: "Alteração de situação" },
+                  {
+                    palete_id: i.id,
+                    status: e.target.value as PaleteStatus,
+                    motivo: "Alteração de situação",
+                  },
                   {
                     onSuccess: () => toast.success("Situação atualizada"),
                     onError: (err: Error) => toast.error(err.message),

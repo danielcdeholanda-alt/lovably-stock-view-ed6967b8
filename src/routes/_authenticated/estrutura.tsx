@@ -60,8 +60,8 @@ function EstruturaPage() {
         <h2 className="font-semibold tracking-tight">Estrutura modular</h2>
         <p className="text-xs text-muted-foreground">
           {galpao?.nome ?? "—"} · {areas.length} área(s) · {ruas.length} rua(s) ·{" "}
-          {capacidadeTotal.toLocaleString("pt-BR")} posições de palete ·{" "}
-          {galpoes.length} galpão(ões) cadastrados
+          {capacidadeTotal.toLocaleString("pt-BR")} posições de palete · {galpoes.length}{" "}
+          galpão(ões) cadastrados
         </p>
       </section>
 

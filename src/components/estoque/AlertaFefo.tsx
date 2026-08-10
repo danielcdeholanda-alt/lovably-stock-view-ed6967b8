@@ -36,7 +36,8 @@ export function AlertaFefo() {
                 <td className="px-4 py-1.5 font-mono">{p.codigo}</td>
                 <td className="px-4 py-1.5 font-mono">{dataBR(p.validade)}</td>
                 <td className="px-4 py-1.5 font-mono">
-                  {p.endereco ?? `${p.area}-${String(p.rua).padStart(2, "0")}-${String(p.posicao).padStart(2, "0")}`}
+                  {p.endereco ??
+                    `${p.area}-${String(p.rua).padStart(2, "0")}-${String(p.posicao).padStart(2, "0")}`}
                 </td>
                 <td className="px-4 py-1.5 font-mono text-warn">{p.sugerido_endereco ?? "—"}</td>
               </tr>

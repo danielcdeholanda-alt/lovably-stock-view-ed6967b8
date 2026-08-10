@@ -20,7 +20,6 @@ function gerarSenha(tamanho = 12) {
   return Array.from(bytes, (b) => alfabeto[b % alfabeto.length]).join("");
 }
 
-
 export const Route = createFileRoute("/_authenticated/usuarios")({
   head: () => ({
     meta: [
@@ -52,7 +51,11 @@ function UsuariosPage() {
   const { isAdmin, carregando, session } = usePapel();
   const meuId = session?.user.id;
   const qc = useQueryClient();
-  const usuarios = useQuery({ queryKey: ["usuarios"], queryFn: () => listarUsuarios(), enabled: isAdmin });
+  const usuarios = useQuery({
+    queryKey: ["usuarios"],
+    queryFn: () => listarUsuarios(),
+    enabled: isAdmin,
+  });
   const invalidar = () => qc.invalidateQueries({ queryKey: ["usuarios"] });
 
   const criar = useMutation({
@@ -80,7 +83,6 @@ function UsuariosPage() {
   const [resetAlvo, setResetAlvo] = useState<string | null>(null);
   const [novaSenha, setNovaSenha] = useState("");
   const [senhaGerada, setSenhaGerada] = useState<{ userId: string; senha: string } | null>(null);
-
 
   if (carregando) return <p className="p-6 text-sm text-muted-foreground">Carregando…</p>;
   if (!isAdmin)

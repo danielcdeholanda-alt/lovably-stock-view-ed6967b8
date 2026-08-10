@@ -55,7 +55,10 @@ function AuthPage() {
   const entrar = async (e: React.FormEvent) => {
     e.preventDefault();
     setOcupado(true);
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password: senha });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: senha,
+    });
     setOcupado(false);
     if (error) return toast.error("E-mail ou senha inválidos");
     navigate({ to: "/dashboard", replace: true });
@@ -107,7 +110,6 @@ function AuthPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4">
-      
       <div className="w-full max-w-sm panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-6">
         <div className="mb-5 flex items-center gap-3">
           <span className="flex size-9 items-center justify-center rounded-sm bg-primary text-primary-foreground">
@@ -171,7 +173,11 @@ function AuthPage() {
             {bootstrap && (
               <div>
                 <label className={labelCls}>Nome</label>
-                <input value={nome} onChange={(e) => setNome(e.target.value)} className={inputCls} />
+                <input
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className={inputCls}
+                />
               </div>
             )}
             <div>
@@ -218,4 +224,3 @@ function AuthPage() {
     </main>
   );
 }
-

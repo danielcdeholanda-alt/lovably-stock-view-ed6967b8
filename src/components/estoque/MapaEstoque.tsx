@@ -211,6 +211,7 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                 </span>
                 {linha.map((c) => {
                   const ativo = sel?.rua === c.rua && sel?.posicao === c.posicao;
+                  const achado = combina(c.item);
                   return (
                     <button
                       key={`${c.posicao}-${c.nivel ?? 1}`}
@@ -226,11 +227,15 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                         "mapa-celula h-3.5 w-3.5 shrink-0 rounded-[3px] transition-all duration-150",
                         corPalete(c),
                         !c.item && "opacity-70",
+                        termo && !achado && "opacity-20 saturate-0",
+                        achado &&
+                          "scale-125 opacity-100 saturate-150 ring-2 ring-primary ring-offset-1 ring-offset-background",
                         ativo && "scale-125 ring-2 ring-ring ring-offset-1 ring-offset-background",
                       )}
                     />
                   );
                 })}
+
                 <span className="ml-2 shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground/70 opacity-0 transition-opacity group-hover:opacity-100">
                   {ocupadosRua}/{linha.length}
                 </span>

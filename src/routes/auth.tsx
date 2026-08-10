@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { criarPrimeiroAdmin, precisaBootstrap } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/auth")({
-
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Entrar | Controle de Estoque FIFO" },
@@ -96,6 +96,14 @@ function AuthPage() {
   };
 
   const recuperando = modo === "recuperar" && !bootstrap;
+
+  if (bootstrap === null) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background px-4">
+        <p className="text-sm text-muted-foreground">Carregando…</p>
+      </main>
+    );
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-4">

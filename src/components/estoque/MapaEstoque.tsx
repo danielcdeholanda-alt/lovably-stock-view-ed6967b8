@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { Boxes, MousePointerClick, PackageSearch } from "lucide-react";
+import { Boxes, MousePointerClick, PackageSearch, Search, X } from "lucide-react";
 import { statusValidade, type CelulaPalete, type ItemEstoque } from "@/data/estoque";
 import { useEstrutura } from "@/lib/estrutura-queries";
 import { AcoesPalete } from "@/components/estoque/AcoesPalete";
 import { cn } from "@/lib/utils";
+
 
 function corPalete(c: CelulaPalete) {
   if (!c.item) return "bg-secondary/50";
@@ -29,6 +30,33 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
   const area = areaSel || AREAS[0] || "";
   const [sel, setSel] = useState<CelulaPalete | null>(null);
   const [paleteAcao, setPaleteAcao] = useState<ItemEstoque | null>(null);
+  const [busca, setBusca] = useState("");
+
+  const termo = busca.trim().toLowerCase();
+  const combina = (i?: ItemEstoque) =>
+    !!termo &&
+    !!i &&
+    (i.codigo.toLowerCase().includes(termo) ||
+      i.produto.toLowerCase().includes(termo) ||
+      i.paleteCodigo.toLowerCase().includes(termo) ||
+      (i.lote ?? "").toLowerCase().includes(termo));
+
+  const sugestoes = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const i of itens) m.set(i.codigo, i.produto);
+    return Array.from(m, ([codigo, produto]) => ({ codigo, produto })).slice(0, 300);
+  }, [itens]);
+
+  const encontrados = useMemo(
+    () => (termo ? itens.filter((i) => combina(i)) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [itens, termo],
+  );
+  const porArea = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const i of encontrados) m.set(i.area, (m.get(i.area) ?? 0) + 1);
+    return Array.from(m).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [encontrados]);
 
   const mapa = useMemo(
     () => (area ? estrutura.buildMapaArea(itens, area) : []),
@@ -39,6 +67,7 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
   const capacidade = estrutura.capacidadeArea(area);
   const ocupados = itens.filter((i) => i.area === area).length;
   const ocupacao = capacidade ? Math.round((ocupados / capacidade) * 100) : 0;
+
 
   return (
     <section className="mapa-surface overflow-hidden rounded-xl border border-border bg-card shadow-lg shadow-background/40">
@@ -106,6 +135,68 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
         </ul>
       </div>
 
+      <div className="px-5 pb-4">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-0 flex-1 sm:max-w-md">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              list="mapa-produtos"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Encontrar produto (código, nome, lote ou palete)"
+              className="w-full rounded-full border border-border/70 bg-background/50 py-1.5 pl-9 pr-8 text-xs outline-none transition focus:ring-2 focus:ring-ring"
+            />
+            <datalist id="mapa-produtos">
+              {sugestoes.map((s) => (
+                <option key={s.codigo} value={s.codigo}>
+                  {s.produto}
+                </option>
+              ))}
+            </datalist>
+            {busca && (
+              <button
+                type="button"
+                onClick={() => setBusca("")}
+                aria-label="Limpar busca"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            )}
+          </div>
+
+          {termo && (
+            <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+              <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-1 font-medium text-primary">
+                {encontrados.length} palete(s) encontrado(s)
+              </span>
+              {porArea.map(([a, n]) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => {
+                    setArea(a);
+                    setSel(null);
+                  }}
+                  className={cn(
+                    "rounded-full border border-border/70 px-2.5 py-1 font-mono transition hover:bg-accent hover:text-foreground",
+                    a === area ? "bg-accent text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {a}: {n}
+                </button>
+              ))}
+              {encontrados.length === 0 && (
+                <span className="text-muted-foreground">Nenhum palete disponível para o termo.</span>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+
+
       <div className="max-h-[560px] overflow-auto border-y border-border/70 bg-background/30 px-5 py-4">
         <div className="space-y-1">
           {mapa.map((linha, i) => {
@@ -120,6 +211,7 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                 </span>
                 {linha.map((c) => {
                   const ativo = sel?.rua === c.rua && sel?.posicao === c.posicao;
+                  const achado = combina(c.item);
                   return (
                     <button
                       key={`${c.posicao}-${c.nivel ?? 1}`}
@@ -135,11 +227,15 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                         "mapa-celula h-3.5 w-3.5 shrink-0 rounded-[3px] transition-all duration-150",
                         corPalete(c),
                         !c.item && "opacity-70",
+                        termo && !achado && "opacity-20 saturate-0",
+                        achado &&
+                          "scale-125 opacity-100 saturate-150 ring-2 ring-primary ring-offset-1 ring-offset-background",
                         ativo && "scale-125 ring-2 ring-ring ring-offset-1 ring-offset-background",
                       )}
                     />
                   );
                 })}
+
                 <span className="ml-2 shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground/70 opacity-0 transition-opacity group-hover:opacity-100">
                   {ocupadosRua}/{linha.length}
                 </span>

@@ -375,32 +375,6 @@ export function useSugestaoRuas(galpaoId?: string, produtoId?: string, paletes =
   });
 }
 
-export type PaleteForaDeOrdem = {
-  palete_id: string;
-  codigo: string;
-  area: string;
-  rua: number;
-  posicao: number;
-  validade: string;
-  endereco: string | null;
-  sugerido_posicao: number | null;
-  sugerido_endereco: string | null;
-};
-
-/** Paletes cuja posição não respeita a ordem de validade (FEFO) dentro da rua. */
-export function usePaletesForaDeOrdem(galpaoId?: string) {
-  return useQuery({
-    queryKey: ["fora-de-ordem", galpaoId],
-    enabled: !!galpaoId,
-    queryFn: async (): Promise<PaleteForaDeOrdem[]> => {
-      const { data, error } = await supabase.rpc("paletes_fora_de_ordem", {
-        p_galpao_id: galpaoId!,
-      });
-      if (error) erro(error);
-      return (data ?? []) as unknown as PaleteForaDeOrdem[];
-    },
-  });
-}
 
 // ---------------- Auditoria de movimentações (somente administrador) ----------------
 

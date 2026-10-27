@@ -155,7 +155,7 @@
   --color-crit: var(--crit);
   --color-dead: var(--dead);
   --font-sans:
-    "Barlow", ui-sans-serif, system-ui, sans-serif;
+    "Outfit", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono", ui-monospace, monospace;
 }

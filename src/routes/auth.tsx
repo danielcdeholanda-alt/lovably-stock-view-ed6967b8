@@ -25,7 +25,16 @@ export const Route = createFileRoute("/auth")({
     ],
   }),
   component: AuthPage,
+  pendingComponent: CarregandoAuth,
 });
+
+function CarregandoAuth() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-4">
+      <p className="text-sm text-muted-foreground">Carregando…</p>
+    </main>
+  );
+}
 
 const inputCls =
   "w-full rounded-sm border border-input bg-background px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring";
@@ -101,11 +110,7 @@ function AuthPage() {
   const recuperando = modo === "recuperar" && !bootstrap;
 
   if (bootstrap === null) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-4">
-        <p className="text-sm text-muted-foreground">Carregando…</p>
-      </main>
-    );
+    return <CarregandoAuth />;
   }
 
   return (

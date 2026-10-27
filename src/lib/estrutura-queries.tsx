@@ -102,8 +102,7 @@ const EstruturaCtx = createContext<Ctx | null>(null);
 export function EstruturaProvider({ children }: { children: ReactNode }) {
   const { data: galpoes = [], isLoading: lg } = useGalpoes();
   const [selecionado, setSelecionado] = useState<string>();
-  const galpaoId =
-    selecionado ?? galpoes.find((g) => g.padrao)?.id ?? galpoes[0]?.id ?? undefined;
+  const galpaoId = selecionado ?? galpoes.find((g) => g.padrao)?.id ?? galpoes[0]?.id ?? undefined;
   const { data: ruas = [], isLoading: lr } = useRuas(galpaoId);
 
   const value = useMemo<Ctx>(

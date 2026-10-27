@@ -1,12 +1,7 @@
 // Estrutura do armazém agora é dinâmica: galpões → áreas → ruas (capacidade × níveis).
 // Este módulo guarda apenas tipos e helpers puros; os dados vêm do banco.
 
-export type PaleteStatus =
-  | "disponivel"
-  | "reservado"
-  | "bloqueado"
-  | "quarentena"
-  | "expedido";
+export type PaleteStatus = "disponivel" | "reservado" | "bloqueado" | "quarentena" | "expedido";
 
 export const PALETE_STATUS_LABEL: Record<PaleteStatus, string> = {
   disponivel: "Disponível",
@@ -36,7 +31,6 @@ export type ItemEstoque = {
   quantidade: number; // caixas no palete
   lote: string | null;
 };
-
 
 export type RuaEstrutura = {
   id: string;
@@ -133,7 +127,6 @@ export function buildMapaArea(
     return celulas;
   });
 }
-
 
 export function resumoAreas(ruas: RuaEstrutura[], itens: ItemEstoque[]) {
   return areasDeRuas(ruas).map((area) => {

@@ -3,7 +3,6 @@ import { Kpis } from "@/components/estoque/Kpis";
 import { MapaEstoque } from "@/components/estoque/MapaEstoque";
 import { Graficos } from "@/components/estoque/Graficos";
 
-
 import { AgrupamentoProdutos } from "@/components/estoque/AgrupamentoProdutos";
 import { TabelaEstoque } from "@/components/estoque/TabelaEstoque";
 import { PainelMovimentacao } from "@/components/estoque/PainelMovimentacao";

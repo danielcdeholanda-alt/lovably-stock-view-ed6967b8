@@ -54,7 +54,8 @@ export function VencimentosPainel({ itens }: { itens: ItemEstoque[] }) {
     return t;
   }, [linhas]);
 
-  const areaAtiva = areaSel && porArea.some(([a]) => a === areaSel) ? areaSel : (porArea[0]?.[0] ?? null);
+  const areaAtiva =
+    areaSel && porArea.some(([a]) => a === areaSel) ? areaSel : (porArea[0]?.[0] ?? null);
   const linhasArea = porArea.find(([a]) => a === areaAtiva)?.[1] ?? [];
 
   return (
@@ -97,9 +98,15 @@ export function VencimentosPainel({ itens }: { itens: ItemEstoque[] }) {
                   >
                     Área {area}
                     <span className="flex items-center gap-1 text-[10px] font-semibold">
-                      {v > 0 && <span className="rounded-full bg-dead/20 px-1.5 text-dead">{v}</span>}
-                      {c > 0 && <span className="rounded-full bg-dead/10 px-1.5 text-dead">{c}</span>}
-                      {at > 0 && <span className="rounded-full bg-warn/15 px-1.5 text-warn">{at}</span>}
+                      {v > 0 && (
+                        <span className="rounded-full bg-dead/20 px-1.5 text-dead">{v}</span>
+                      )}
+                      {c > 0 && (
+                        <span className="rounded-full bg-dead/10 px-1.5 text-dead">{c}</span>
+                      )}
+                      {at > 0 && (
+                        <span className="rounded-full bg-warn/15 px-1.5 text-warn">{at}</span>
+                      )}
                     </span>
                   </button>
                 );

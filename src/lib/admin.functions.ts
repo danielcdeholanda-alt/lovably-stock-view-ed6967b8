@@ -10,7 +10,10 @@ const novoUsuario = z.object({
   role: z.enum(["admin", "operador"]).default("operador"),
 });
 
-async function garantirAdmin(supabase: { rpc: (fn: string, args: unknown) => Promise<{ data: unknown; error: unknown }> }, userId: string) {
+async function garantirAdmin(
+  supabase: { rpc: (fn: string, args: unknown) => Promise<{ data: unknown; error: unknown }> },
+  userId: string,
+) {
   const { data, error } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
   if (error || data !== true) throw new Error("Somente administradores podem fazer isso");
 }
@@ -62,16 +65,18 @@ export const listarUsuarios = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false });
     const { data: lista } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
     const authUsers = lista?.users ?? [];
-    return (perfis ?? [])
-      // Ignora perfis cujo login já foi excluído (evita ações sobre usuários inexistentes).
-      .filter((p) => authUsers.some((u) => u.id === p.id))
-      .map((p) => ({
-        ...p,
-        roles: (papeis ?? []).filter((r) => r.user_id === p.id).map((r) => r.role as string),
-        ultimoReset: (resets ?? []).find((r) => r.user_id === p.id)?.created_at ?? null,
-        senhaProvisoria:
-          authUsers.find((u) => u.id === p.id)?.user_metadata?.senha_provisoria === true,
-      }));
+    return (
+      (perfis ?? [])
+        // Ignora perfis cujo login já foi excluído (evita ações sobre usuários inexistentes).
+        .filter((p) => authUsers.some((u) => u.id === p.id))
+        .map((p) => ({
+          ...p,
+          roles: (papeis ?? []).filter((r) => r.user_id === p.id).map((r) => r.role as string),
+          ultimoReset: (resets ?? []).find((r) => r.user_id === p.id)?.created_at ?? null,
+          senhaProvisoria:
+            authUsers.find((u) => u.id === p.id)?.user_metadata?.senha_provisoria === true,
+        }))
+    );
   });
 
 /** Admin redefine a senha de um usuário. A senha nunca é armazenada nem recuperável depois. */
@@ -83,9 +88,7 @@ export const redefinirSenha = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     await garantirAdmin(context.supabase as never, context.userId);
     if (data.userId === context.userId) {
-      throw new Error(
-        "Use a opção “Trocar minha senha” para alterar a sua própria senha.",
-      );
+      throw new Error("Use a opção “Trocar minha senha” para alterar a sua própria senha.");
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
@@ -113,8 +116,6 @@ export const redefinirSenha = createServerFn({ method: "POST" })
 
     return { ok: true };
   });
-
-
 
 export const criarUsuario = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

@@ -191,7 +191,12 @@ function useInvalidate() {
 export function useCriarProduto() {
   const invalidate = useInvalidate();
   return useMutation({
-    mutationFn: async (p: { codigo: string; nome: string; descricao?: string; unidade: string }) => {
+    mutationFn: async (p: {
+      codigo: string;
+      nome: string;
+      descricao?: string;
+      unidade: string;
+    }) => {
       const { error } = await supabase.from("produtos").insert({
         codigo: p.codigo.trim(),
         nome: p.nome.trim(),
@@ -375,7 +380,6 @@ export function useSugestaoRuas(galpaoId?: string, produtoId?: string, paletes =
   });
 }
 
-
 // ---------------- Auditoria de movimentações (somente administrador) ----------------
 
 export type FiltroAuditoria = {
@@ -452,7 +456,10 @@ export function useUsuariosAuditoria(ativo = true) {
     queryKey: ["usuarios-auditoria"],
     enabled: ativo,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("id, nome, email").order("nome");
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, nome, email")
+        .order("nome");
       if (error) erro(error);
       return (data ?? []).map((p) => ({ id: p.id, nome: p.nome ?? p.email ?? "—" }));
     },

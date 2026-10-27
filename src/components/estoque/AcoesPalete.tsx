@@ -45,9 +45,7 @@ export function AcoesPalete({
       }}
     >
       <DialogContent className="max-w-lg">
-        {item && (
-          <Conteudo item={item} acao={acao} setAcao={setAcao} onConcluir={onFechar} />
-        )}
+        {item && <Conteudo item={item} acao={acao} setAcao={setAcao} onConcluir={onFechar} />}
       </DialogContent>
     </Dialog>
   );
@@ -87,10 +85,7 @@ function Conteudo({
           valor={new Date(item.validade + "T00:00:00Z").toLocaleDateString("pt-BR")}
         />
         <Campo label="Situação" valor={PALETE_STATUS_LABEL[item.status]} />
-        <Campo
-          label="Entrada"
-          valor={new Date(item.dataEntrada).toLocaleDateString("pt-BR")}
-        />
+        <Campo label="Entrada" valor={new Date(item.dataEntrada).toLocaleDateString("pt-BR")} />
       </div>
 
       {!disponivel && (
@@ -105,11 +100,7 @@ function Conteudo({
           <Button disabled={!disponivel} onClick={() => setAcao("retirar")}>
             Retirar palete
           </Button>
-          <Button
-            variant="secondary"
-            disabled={!disponivel}
-            onClick={() => setAcao("transferir")}
-          >
+          <Button variant="secondary" disabled={!disponivel} onClick={() => setAcao("transferir")}>
             Transferir palete
           </Button>
         </div>

@@ -101,10 +101,7 @@ export async function exportarPdf(
   registros: RegistroAuditoria[],
   opcoes: { galpaoNome?: string; filtros?: string[] } = {},
 ) {
-  const [{ jsPDF }, autoTableMod] = await Promise.all([
-    import("jspdf"),
-    import("jspdf-autotable"),
-  ]);
+  const [{ jsPDF }, autoTableMod] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
   const autoTable = autoTableMod.default;
 
   const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
@@ -143,7 +140,9 @@ export async function exportarPdf(
     m.lote ?? "—",
     dataBR(m.validade),
     m.palete_codigo ?? "—",
-    m.quantidade_anterior != null ? `${m.quantidade_anterior} > ${m.quantidade}` : String(m.quantidade),
+    m.quantidade_anterior != null
+      ? `${m.quantidade_anterior} > ${m.quantidade}`
+      : String(m.quantidade),
     origemDe(m),
     destinoDe(m) ?? "—",
     m.motivo ?? m.observacao ?? "—",
@@ -177,12 +176,9 @@ export async function exportarPdf(
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(120);
-    doc.text(
-      `Página ${i} de ${total}`,
-      larguraPag - 40,
-      doc.internal.pageSize.getHeight() - 16,
-      { align: "right" },
-    );
+    doc.text(`Página ${i} de ${total}`, larguraPag - 40, doc.internal.pageSize.getHeight() - 16, {
+      align: "right",
+    });
   }
 
   baixar(doc.output("blob"), `auditoria-movimentacoes-${hoje()}.pdf`);

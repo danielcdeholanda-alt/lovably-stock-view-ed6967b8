@@ -5,7 +5,6 @@ import { useEstrutura } from "@/lib/estrutura-queries";
 import { AcoesPalete } from "@/components/estoque/AcoesPalete";
 import { cn } from "@/lib/utils";
 
-
 function corPalete(c: CelulaPalete) {
   if (!c.item) return "bg-secondary/50";
   const s = statusValidade(c.item.validade);
@@ -67,7 +66,6 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
   const capacidade = estrutura.capacidadeArea(area);
   const ocupados = itens.filter((i) => i.area === area).length;
   const ocupacao = capacidade ? Math.round((ocupados / capacidade) * 100) : 0;
-
 
   return (
     <section className="mapa-surface overflow-hidden rounded-xl border border-border bg-card shadow-lg shadow-background/40">
@@ -188,14 +186,14 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                 </button>
               ))}
               {encontrados.length === 0 && (
-                <span className="text-muted-foreground">Nenhum palete disponível para o termo.</span>
+                <span className="text-muted-foreground">
+                  Nenhum palete disponível para o termo.
+                </span>
               )}
             </div>
           )}
         </div>
       </div>
-
-
 
       <div className="max-h-[560px] overflow-auto border-y border-border/70 bg-background/30 px-5 py-4">
         <div className="space-y-1">
@@ -221,7 +219,9 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
                         if (c.item) setPaleteAcao(c.item);
                       }}
                       title={`${c.area}-${c.rua} · palete ${c.posicao}${
-                        c.item ? ` · ${c.item.codigo} (clique para retirar ou transferir)` : " · livre"
+                        c.item
+                          ? ` · ${c.item.codigo} (clique para retirar ou transferir)`
+                          : " · livre"
                       }`}
                       className={cn(
                         "mapa-celula h-3.5 w-3.5 shrink-0 rounded-[3px] transition-all duration-150",

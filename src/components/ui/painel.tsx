@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 /** Classe base dos painéis — mesmo acabamento do Mapa de estoque. */
 export const painelCls =
-  "panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40";
+  "panel-surface rounded-2xl border border-border/60 bg-card shadow-sm shadow-foreground/5";
 
 /** Barra arredondada que envolve abas/filtros em pílula. */
 export const pillBarCls =
@@ -14,7 +14,7 @@ export function pillCls(ativo: boolean) {
   return cn(
     "rounded-full px-3 py-1 text-xs font-medium transition",
     ativo
-      ? "bg-primary text-primary-foreground shadow-sm"
+      ? "bg-foreground text-background shadow-sm"
       : "text-muted-foreground hover:bg-accent hover:text-foreground",
   );
 }

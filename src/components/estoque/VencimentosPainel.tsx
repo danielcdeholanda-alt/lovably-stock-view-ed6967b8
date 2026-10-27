@@ -10,7 +10,6 @@ import {
 } from "@/data/estoque";
 import { cn } from "@/lib/utils";
 
-const SEVERIDADE_ORDEM: StatusValidade[] = ["vencido", "critico", "atencao"];
 
 const sevCls: Record<StatusValidade, string> = {
   vencido: "border-dead/40 bg-dead/10 text-dead",
@@ -154,6 +153,3 @@ export function VencimentosPainel({ itens }: { itens: ItemEstoque[] }) {
     </Painel>
   );
 }
-
-// Mantido para referência de severidade em outros painéis.
-export const ordemSeveridade = SEVERIDADE_ORDEM;

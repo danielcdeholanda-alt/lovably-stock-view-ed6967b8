@@ -7,6 +7,7 @@ import { Graficos } from "@/components/estoque/Graficos";
 import { AgrupamentoProdutos } from "@/components/estoque/AgrupamentoProdutos";
 import { TabelaEstoque } from "@/components/estoque/TabelaEstoque";
 import { PainelMovimentacao } from "@/components/estoque/PainelMovimentacao";
+import { VencimentosPainel } from "@/components/estoque/VencimentosPainel";
 import { useEstoque } from "@/lib/estoque-queries";
 import { useEstrutura } from "@/lib/estrutura-queries";
 import { HOJE } from "@/data/estoque";
@@ -57,6 +58,7 @@ function Painel() {
       <Kpis itens={itens} />
       <PainelMovimentacao itens={itens} />
       <MapaEstoque itens={itens} />
+      <VencimentosPainel itens={itens} />
 
       <Graficos itens={itens} />
       <AgrupamentoProdutos itens={itens} />

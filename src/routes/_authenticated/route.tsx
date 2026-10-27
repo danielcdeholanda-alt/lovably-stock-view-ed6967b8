@@ -46,24 +46,24 @@ function Cabecalho() {
   };
 
   return (
-    <header className="border-b border-border bg-card">
+    <header className="sticky top-0 z-20 border-b border-border/70 bg-card/90 shadow-sm shadow-background/60 backdrop-blur">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3">
         <div className="flex items-center gap-3">
-          <span className="flex size-9 items-center justify-center rounded-sm bg-primary text-primary-foreground">
+          <span className="flex size-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/30">
             <Warehouse className="size-5" />
           </span>
           <div>
-            <h1 className="text-base font-bold uppercase tracking-wide">Controle de Estoque</h1>
+            <h1 className="text-base font-bold tracking-tight">Controle de Estoque</h1>
             <p className="text-xs text-muted-foreground">{session?.user.email}</p>
           </div>
         </div>
 
-        <nav className="flex flex-wrap items-center gap-2 text-xs">
+        <nav className="flex flex-wrap items-center gap-1.5 rounded-full border border-border/70 bg-background/60 p-1 text-xs">
           {galpoes.length > 0 && (
             <select
               value={galpaoId ?? ""}
               onChange={(e) => setGalpaoId(e.target.value)}
-              className="rounded-sm border border-input bg-background px-2 py-1.5 text-xs"
+              className="rounded-full border border-input bg-card px-2 py-1.5 text-xs"
               aria-label="Galpão"
             >
               {galpoes.map((g) => (
@@ -75,7 +75,7 @@ function Cabecalho() {
           )}
           <Link
             to="/dashboard"
-            className="rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent [&.active]:border-primary [&.active]:text-primary"
+            className="rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground [&.active]:bg-primary [&.active]:text-primary-foreground [&.active]:shadow-sm"
           >
             Painel
           </Link>
@@ -83,19 +83,19 @@ function Cabecalho() {
             <>
               <Link
                 to="/estrutura"
-                className="rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent [&.active]:border-primary [&.active]:text-primary"
+                className="rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground [&.active]:bg-primary [&.active]:text-primary-foreground [&.active]:shadow-sm"
               >
                 Estrutura
               </Link>
               <Link
                 to="/usuarios"
-                className="rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent [&.active]:border-primary [&.active]:text-primary"
+                className="rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground [&.active]:bg-primary [&.active]:text-primary-foreground [&.active]:shadow-sm"
               >
                 Usuários
               </Link>
               <Link
                 to="/auditoria"
-                className="rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent [&.active]:border-primary [&.active]:text-primary"
+                className="rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground [&.active]:bg-primary [&.active]:text-primary-foreground [&.active]:shadow-sm"
               >
                 Auditoria
               </Link>
@@ -103,14 +103,14 @@ function Cabecalho() {
           )}
           <Link
             to="/trocar-senha"
-            className="rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent [&.active]:border-primary [&.active]:text-primary"
+            className="rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground [&.active]:bg-primary [&.active]:text-primary-foreground [&.active]:shadow-sm"
           >
             Trocar senha
           </Link>
           <button
             type="button"
             onClick={sair}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 transition hover:bg-accent"
+            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-medium text-muted-foreground transition hover:bg-accent hover:text-foreground"
           >
             <LogOut className="size-3.5" />
             Sair

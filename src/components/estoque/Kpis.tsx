@@ -18,29 +18,29 @@ export function Kpis({ itens }: { itens: ItemEstoque[] }) {
       value: paletes.toLocaleString("pt-BR"),
       hint: `${caixas.toLocaleString("pt-BR")} caixas · ${ruas.length} ruas`,
       icon: Boxes,
-      tone: "text-primary",
+      chip: "bg-primary/12 text-primary",
     },
     {
       label: "Ocupação do armazém",
       value: `${ocupacao}%`,
       hint: `${capacidadeTotal.toLocaleString("pt-BR")} posições de palete`,
-
       icon: Warehouse,
-      tone: "text-chart-3",
+      chip: "bg-chart-3/12 text-chart-3",
+      barra: ocupacao,
     },
     {
       label: "Validade crítica (≤30d)",
       value: criticos.toLocaleString("pt-BR"),
-      hint: "priorizar saída FIFO",
+      hint: "priorizar a saída destes paletes",
       icon: AlertTriangle,
-      tone: "text-crit",
+      chip: "bg-crit/12 text-crit",
     },
     {
       label: "Vencidos / SKUs ativos",
       value: `${vencidos.toLocaleString("pt-BR")} / ${skus}`,
-      hint: "bloquear e dar baixa",
+      hint: "vencidos: bloquear e dar baixa",
       icon: PackageCheck,
-      tone: vencidos ? "text-dead" : "text-ok",
+      chip: vencidos ? "bg-dead/12 text-dead" : "bg-ok/12 text-ok",
     },
   ];
 
@@ -49,14 +49,24 @@ export function Kpis({ itens }: { itens: ItemEstoque[] }) {
       {cards.map((c) => (
         <div
           key={c.label}
-          className="panel-surface rounded-xl border border-border bg-card shadow-lg shadow-background/40 p-4"
+          className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm shadow-foreground/5"
         >
-          <div className="flex items-start justify-between gap-2">
-            <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{c.label}</p>
-            <c.icon className={cn("size-4", c.tone)} />
+          <div className="flex items-center gap-3">
+            <span className={cn("grid size-10 shrink-0 place-items-center rounded-xl", c.chip)}>
+              <c.icon className="size-5" />
+            </span>
+            <p className="min-w-0 text-xs font-medium text-muted-foreground">{c.label}</p>
           </div>
-          <p className="mt-2 font-mono text-3xl font-bold leading-none">{c.value}</p>
-          <p className="mt-1.5 text-xs text-muted-foreground">{c.hint}</p>
+          <p className="mt-4 font-mono text-3xl font-bold leading-none tracking-tight">{c.value}</p>
+          {c.barra !== undefined && (
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-chart-3"
+                style={{ width: `${Math.min(100, c.barra)}%` }}
+              />
+            </div>
+          )}
+          <p className="mt-2 text-xs text-muted-foreground">{c.hint}</p>
         </div>
       ))}
     </div>

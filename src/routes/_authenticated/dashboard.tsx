@@ -37,13 +37,16 @@ function Painel() {
   const { data: itens = [], isLoading, error } = useEstoque(galpaoId);
 
   return (
-    <main className="mx-auto flex max-w-[1400px] flex-col gap-3 px-4 py-5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-muted-foreground">
-          {galpao?.nome ?? "Galpão"} · {areas.length} área(s) ·{" "}
-          {areas.join(", ") || "sem áreas cadastradas"}
-        </p>
-        <p className="font-mono text-xs text-muted-foreground">
+    <main className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-6">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h2 className="text-2xl font-bold tracking-tight">Visão geral do estoque</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {galpao?.nome ?? "Galpão"} · {areas.length} área(s) ·{" "}
+            {areas.join(", ") || "sem áreas cadastradas"}
+          </p>
+        </div>
+        <p className="rounded-full border border-border/70 bg-card px-3 py-1 font-mono text-xs text-muted-foreground">
           Referência: {HOJE.toLocaleDateString("pt-BR", { timeZone: "UTC" })}
         </p>
       </div>

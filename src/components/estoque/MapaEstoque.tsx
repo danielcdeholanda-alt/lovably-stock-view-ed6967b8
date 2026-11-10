@@ -4,6 +4,7 @@ import { statusValidade, type CelulaPalete, type ItemEstoque } from "@/data/esto
 import { useEstrutura } from "@/lib/estrutura-queries";
 import { AcoesPalete } from "@/components/estoque/AcoesPalete";
 import { cn } from "@/lib/utils";
+import { LeitorCodigo } from "@/components/estoque/LeitorCodigo";
 
 function corPalete(c: CelulaPalete) {
   if (!c.item) return "bg-secondary/50";
@@ -163,6 +164,7 @@ export function MapaEstoque({ itens }: { itens: ItemEstoque[] }) {
               </button>
             )}
           </div>
+          <LeitorCodigo onLer={setBusca} className="h-8 rounded-full" />
 
           {termo && (
             <div className="flex flex-wrap items-center gap-1.5 text-[11px]">

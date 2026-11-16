@@ -124,16 +124,13 @@ function CampoProduto({ codigo, setCodigo }: { codigo: string; setCodigo: (v: st
     campo: (
       <div>
         <label className={labelCls}>Código do produto</label>
-        <div className="flex gap-1.5">
-          <input
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-            className={inputCls}
-            placeholder="Digite ou leia o código (ex.: 0401000089)"
-            autoComplete="off"
-          />
-          <LeitorCodigo onLer={setCodigo} />
-        </div>
+        <input
+          value={codigo}
+          onChange={(e) => setCodigo(e.target.value)}
+          className={inputCls}
+          placeholder="Digite o código (ex.: 0401000089)"
+          autoComplete="off"
+        />
         {produto ? (
           <p className="mt-1 text-xs text-ok">
             {produto.nome}{" "}
@@ -567,12 +564,16 @@ function FormSaida({ itens }: { itens: ItemEstoque[] }) {
         <>
           <div>
             <label className={labelCls}>Buscar palete</label>
-            <input
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-              className={inputCls}
-              placeholder="Produto, lote, palete ou endereço"
-            />
+            <div className="flex gap-1.5">
+              <input
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                className={inputCls}
+                placeholder="Leia ou digite o código do palete"
+                autoComplete="off"
+              />
+              <LeitorCodigo onLer={setBusca} />
+            </div>
           </div>
           <div>
             <label className={labelCls}>Observação (opcional)</label>
@@ -713,12 +714,16 @@ function FormTransferencia({ itens }: { itens: ItemEstoque[] }) {
     <form onSubmit={submit} className="space-y-3">
       <div>
         <label className={labelCls}>Buscar palete de origem</label>
-        <input
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          className={inputCls}
-          placeholder="Palete, produto ou endereço"
-        />
+        <div className="flex gap-1.5">
+          <input
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            className={inputCls}
+            placeholder="Leia ou digite o código do palete"
+            autoComplete="off"
+          />
+          <LeitorCodigo onLer={setBusca} />
+        </div>
       </div>
       <div className="max-h-40 overflow-auto rounded-sm border border-border">
         {candidatos.map((i) => (
@@ -857,12 +862,16 @@ function FormAjuste({ itens }: { itens: ItemEstoque[] }) {
     <form onSubmit={submit} className="space-y-3">
       <div>
         <label className={labelCls}>Buscar palete</label>
-        <input
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          className={inputCls}
-          placeholder="Palete, produto ou endereço"
-        />
+        <div className="flex gap-1.5">
+          <input
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+            className={inputCls}
+            placeholder="Leia ou digite o código do palete"
+            autoComplete="off"
+          />
+          <LeitorCodigo onLer={setBusca} />
+        </div>
       </div>
       <div className="max-h-40 overflow-auto rounded-sm border border-border">
         {candidatos.map((i) => (
@@ -970,16 +979,13 @@ function FormProduto() {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className={labelCls}>Código (tipo + 000 + sabor)</label>
-          <div className="flex gap-1.5">
-            <input
-              value={codigo}
-              onChange={(e) => setCodigo(e.target.value)}
-              className={inputCls}
-              placeholder="0401000089"
-              inputMode="numeric"
-            />
-            <LeitorCodigo onLer={setCodigo} />
-          </div>
+          <input
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            className={inputCls}
+            placeholder="0401000089"
+            inputMode="numeric"
+          />
           {codigo.trim() ? (
             codigoValido(codigo) ? (
               <p className="mt-1 font-mono text-[11px] text-ok">

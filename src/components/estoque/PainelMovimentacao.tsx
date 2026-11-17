@@ -40,6 +40,7 @@ import {
 } from "@/lib/codigo-produto";
 import { cn } from "@/lib/utils";
 import { LeitorCodigo } from "@/components/estoque/LeitorCodigo";
+import { LeitorEtiqueta } from "@/components/estoque/LeitorEtiqueta";
 import { PainelHeader, painelCls, pillBarCls, pillCls } from "@/components/ui/painel";
 
 const inputCls =
@@ -173,6 +174,8 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
   const [fabricacao, setFabricacao] = useState("");
   const [lote, setLote] = useState("");
   const [observacao, setObservacao] = useState("");
+  const [viaEtiqueta, setViaEtiqueta] = useState(false);
+  const [confirmado, setConfirmado] = useState(false);
   const { data: sugestoes = [] } = useSugestaoRuas(
     estrutura.galpaoId,
     produto?.id,
@@ -200,6 +203,8 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!produto) return toast.error("Informe um código de produto válido");
+    if (viaEtiqueta && !confirmado)
+      return toast.error("Confira os dados lidos da etiqueta e marque a confirmação antes de salvar");
     if (ruaBloqueada)
       return toast.error(
         `A rua ${area}-${String(rua).padStart(2, "0")} já armazena ${ocupanteRua?.codigo}. Cada rua só pode ter um produto.`,
@@ -235,6 +240,8 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
           setPaletes("1");
           setLote("");
           setObservacao("");
+          setViaEtiqueta(false);
+          setConfirmado(false);
         },
         onError: (err: Error) => toast.error(err.message),
       },
@@ -243,6 +250,17 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
 
   return (
     <form onSubmit={submit} className="space-y-3">
+      <LeitorEtiqueta
+        onAplicar={(l) => {
+          if (l.codigo) setCodigo(normalizarCodigo(l.codigo));
+          if (l.lote) setLote(l.lote);
+          if (l.validade && /^\d{4}-\d{2}-\d{2}$/.test(l.validade)) setValidade(l.validade);
+          if (l.fabricacao && /^\d{4}-\d{2}-\d{2}$/.test(l.fabricacao)) setFabricacao(l.fabricacao);
+          if (!l.codigo && l.produto) toast.info(`Produto lido: ${l.produto}. Informe o código.`);
+          setViaEtiqueta(true);
+          setConfirmado(false);
+        }}
+      />
       {campo}
 
       <div className="grid grid-cols-2 gap-3">
@@ -376,7 +394,26 @@ function FormEntrada({ itens }: { itens: ItemEstoque[] }) {
         </div>
       </div>
 
-      <button type="submit" className={btnCls} disabled={entrada.isPending}>
+      {viaEtiqueta && (
+        <label className="flex items-start gap-2 rounded-sm border border-primary/40 bg-primary/10 px-2 py-1.5 text-xs">
+          <input
+            type="checkbox"
+            checked={confirmado}
+            onChange={(e) => setConfirmado(e.target.checked)}
+            className="mt-0.5"
+          />
+          <span>
+            Campos preenchidos pela leitura da etiqueta. Conferi produto, lote e validade com a
+            etiqueta física.
+          </span>
+        </label>
+      )}
+
+      <button
+        type="submit"
+        className={btnCls}
+        disabled={entrada.isPending || (viaEtiqueta && !confirmado)}
+      >
         <ArrowDownToLine className="size-4" />
         {entrada.isPending ? "Registrando…" : "Registrar entrada"}
       </button>
